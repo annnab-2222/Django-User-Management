@@ -1,8 +1,95 @@
-<h2>Register</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Register</button>
-</form>
-<a href="{% url 'login' %}">Login</a>
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
 
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    .register-container {
+      max-width: 450px;
+      margin: 60px auto;
+      background-color: #fdfdfd;
+      padding: 35px 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .register-container h2 {
+      text-align: center;
+      color: #2c3e50;
+      font-size: 26px;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .register-container h2 i {
+      margin-right: 10px;
+      color: #16a085;
+    }
+
+    .register-container form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .register-container form button {
+      background-color: #1abc9c;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .register-container form button i {
+      margin-right: 6px;
+    }
+
+    .register-container form button:hover {
+      background-color: #14967f;
+    }
+
+    .login-link {
+      display: block;
+      margin-top: 18px;
+      text-align: center;
+      color: #34495e;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .login-link i {
+      margin-right: 5px;
+    }
+
+    .login-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="register-container">
+    <h2><i class="fas fa-user-plus"></i>Register</h2>
+
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit"><i class="fas fa-paper-plane"></i> Register</button>
+    </form>
+
+    <a href="{% url 'login' %}" class="login-link"><i class="fas fa-sign-in-alt"></i> Already have an account? Login</a>
+  </div>
+
+</body>
+</html>
+{% endblock %}

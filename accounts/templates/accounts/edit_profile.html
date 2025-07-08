@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}  {# Remove this line if you’re not using crispy forms #}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    .edit-profile-container {
+      max-width: 500px;
+      margin: 60px auto;
+      background-color: #ffffff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .edit-profile-container h2 {
+      color: #2c3e50;
+      font-size: 26px;
+      text-align: center;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .edit-profile-container h2 i {
+      margin-right: 10px;
+      color: #3498db;
+    }
+
+    .edit-profile-container form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .edit-profile-container form button {
+      background-color: #3498db;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: bold;
+      margin-top: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .edit-profile-container form button:hover {
+      background-color: #2471a3;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #2980b9;
+      font-size: 14px;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="edit-profile-container">
+    <h2><i class="fas fa-user-edit"></i>Edit Profile</h2>
+
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit"><i class="fas fa-save"></i> Save Changes</button>
+    </form>
+
+    <a href="{% url 'profile' %}" class="back-link"><i class="fas fa-arrow-left"></i> Back to Profile</a>
+  </div>
+
+</body>
+</html>
+{% endblock %}

@@ -1,5 +1,5 @@
 # Django-User-Management
-Certainly! Below is a **comprehensive README.md template** tailored for your Django User Management project, covering all the requirements, features, testing, git workflow, and optional extras. You can customize it by adding your screenshots, links, and specific details.
+ Below is a **comprehensive README.md template** tailored for your Django User Management project, covering all the requirements, features, testing, git workflow, and optional extras. You can customize it by adding your screenshots, links, and specific details.
 
 # Django User Management Project
 
@@ -112,7 +112,19 @@ Tests cover:
 ## Screenshots
 
 _Add screenshots here showing:_
-![home page](./)
+## home page
+![home page](./asset/home.png)
+
+## registration
+![registration](./asset/resgester.png)
+
+## password
+![password](./asset/change.pmg)
+
+## profile
+![profile](./asset/profile.png)
+
+
 - Registration page
 - Verification message
 - Login page

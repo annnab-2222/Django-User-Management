@@ -112,7 +112,7 @@ Tests cover:
 ## Screenshots
 
 _Add screenshots here showing:_
-
+![home page](./)
 - Registration page
 - Verification message
 - Login page

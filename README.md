@@ -119,7 +119,7 @@ _Add screenshots here showing:_
 ![registration](./asset/resgester.png)
 
 ## password
-![password](./asset/change.pmg)
+![password](./asset/change.png)
 
 ## profile
 ![profile](./asset/profile.png)

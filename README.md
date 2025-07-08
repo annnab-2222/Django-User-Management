@@ -172,8 +172,4 @@ Visit `http://localhost:8000` in your browser.
 - Share progress and ask questions in the WhatsApp group.
 - Regular updates will be posted during the project development.
 
-## License
 
-This project is licensed under the MIT License.
-
-Feel free to customize this README with your actual GitHub repo link, screenshots, and deployment URLs. If you want, I can help you generate the exact markdown with your project details included!

@@ -127,35 +127,6 @@ _Add screenshots here showing:_
 - Edit profile page
 - Admin panel user list
 
-  This are the screenshot
-  
-## (Optional) Deployment
-
-The project can be deployed on platforms like Render, Railway, or Heroku.
-
-### Example: Deploy on Heroku
-
-- Create `Procfile` and `requirements.txt`.
-- Push to Heroku git remote.
-- Set environment variables for Django secret key and allowed hosts.
-
-## (Optional) Docker Usage
-
-To run the project with Docker:
-
-1. Build the Docker image:
-
-```bash
-docker build -t django-usermgmt .
-```
-
-2. Run the container:
-
-```bash
-docker run -p 8000:8000 django-usermgmt
-```
-
-Visit `http://localhost:8000` in your browser.
 
 ## Additional Resources
 

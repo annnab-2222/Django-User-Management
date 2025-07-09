@@ -8,7 +8,7 @@
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-  <!-- Optional global CSS -->
+  <!-- Global CSS with profile image styles -->
   <style>
     body {
       margin: 0;
@@ -32,10 +32,21 @@
       text-decoration: none;
       margin-left: 15px;
       font-weight: bold;
+      display: inline-flex;
+      align-items: center;
     }
 
     .navbar a:hover {
       text-decoration: underline;
+    }
+
+    .profile-img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 8px;
+      border: 2px solid white;
     }
 
     .container {
@@ -59,7 +70,14 @@
     <div><i class="fas fa-users"></i> My App</div>
     <div>
       {% if user.is_authenticated %}
-        <a href="{% url 'profile' %}"><i class="fas fa-user-circle"></i> Profile</a>
+        <a href="{% url 'profile' %}">
+          {% if profile and profile.photo %}
+            <img src="{{ profile.photo.url }}" alt="Profile" class="profile-img" />
+          {% else %}
+            <i class="fas fa-user-circle" style="margin-right: 8px;"></i>
+          {% endif %}
+          Profile
+        </a>
         <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
       {% else %}
         <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>

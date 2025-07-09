@@ -1,95 +1,746 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block content %}
+{% extends "base.html" %} {% load static %} {% block title %}Profile - {{
+user.username }}{% endblock %} {% block content %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
-    .profile-wrapper {
-      max-width: 700px;
-      margin: 60px auto;
-      background-color: #fdfdfd;
-      padding: 40px 30px;
-      border-radius: 12px;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-    .profile-wrapper h2 {
-      font-size: 28px;
-      color: #2c3e50;
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-    }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
 
-    .profile-wrapper h2 i {
-      margin-right: 10px;
-      color: #2980b9;
-    }
+      .profile-container {
+        max-width: 900px;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin: 20px auto;
+      }
 
-    .user-info {
-      margin-top: 20px;
-      font-size: 16px;
-      color: #555;
-    }
+      .profile-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 24px;
+        padding: 40px 30px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
 
-    .user-info i {
-      margin-right: 8px;
-      color: #3498db;
-    }
+      .profile-info {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 24px;
+        padding: 40px 30px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
 
-    .profile-actions {
-      margin-top: 30px;
-      display: flex;
-      gap: 15px;
-    }
+      .profile-card::before,
+      .profile-info::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+          45deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        transform: rotate(45deg);
+        animation: shimmer 3s infinite;
+      }
 
-    .profile-actions a {
-      display: inline-block;
-      background-color: #3498db;
-      color: white;
-      text-decoration: none;
-      padding: 10px 16px;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 14px;
-      transition: background-color 0.3s ease;
-    }
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%) translateY(-100%) rotate(45deg);
+        }
+        100% {
+          transform: translateX(100%) translateY(100%) rotate(45deg);
+        }
+      }
 
-    .profile-actions a:hover {
-      background-color: #216fa2;
-    }
+      .profile-avatar {
+        width: 150px;
+        height: 150px;
+        margin: 0 auto 25px;
+        position: relative;
+        z-index: 2;
+      }
 
-    .profile-actions a.logout {
-      background-color: #e74c3c;
-    }
+      .avatar-circle {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        animation: pulse 2s ease-in-out infinite alternate;
+        position: relative;
+        overflow: hidden;
+      }
 
-    .profile-actions a.logout:hover {
-      background-color: #c0392b;
-    }
-  </style>
-</head>
-<body>
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(1.05);
+        }
+      }
 
-  <div class="profile-wrapper">
-    <h2><i class="fas fa-user-circle"></i>Welcome, {{ user.username }}</h2>
+      .avatar-circle i {
+        font-size: 60px;
+        color: white;
+      }
 
-    <div class="user-info">
-      <p><i class="fas fa-envelope"></i> Email: {{ user.email }}</p>
-      <p><i class="fas fa-calendar-alt"></i> Joined: {{ user.date_joined|date:"F j, Y" }}</p>
-      <!-- Add more user-specific data as needed -->
+      .profile-image {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      .upload-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        cursor: pointer;
+      }
+
+      .avatar-circle:hover .upload-overlay {
+        opacity: 1;
+      }
+
+      .upload-overlay i {
+        font-size: 24px;
+        color: white;
+      }
+
+      .upload-input {
+        display: none;
+      }
+
+      .profile-card h2 {
+        font-size: 32px;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        font-weight: 700;
+        position: relative;
+        z-index: 2;
+      }
+
+      .profile-subtitle {
+        color: #7f8c8d;
+        font-size: 16px;
+        margin-bottom: 40px;
+        font-weight: 400;
+        position: relative;
+        z-index: 2;
+      }
+
+      .profile-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 30px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .profile-actions a,
+      .profile-actions button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        text-decoration: none;
+        padding: 14px 20px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        position: relative;
+        overflow: hidden;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+      }
+
+      .profile-actions a::before,
+      .profile-actions button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .profile-actions a:hover::before,
+      .profile-actions button:hover::before {
+        left: 100%;
+      }
+
+      .profile-actions a:hover,
+      .profile-actions button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      }
+
+      .profile-actions a i,
+      .profile-actions button i {
+        margin-right: 8px;
+        font-size: 16px;
+      }
+
+      .profile-actions a.logout {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+      }
+
+      .profile-actions a.logout:hover {
+        box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+      }
+
+      .profile-actions a.edit {
+        background: linear-gradient(135deg, #2ecc71, #27ae60);
+        box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+      }
+
+      .profile-actions a.edit:hover {
+        box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+      }
+
+      .upload-btn {
+        background: linear-gradient(135deg, #f39c12, #e67e22) !important;
+        box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3) !important;
+      }
+
+      .upload-btn:hover {
+        box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4) !important;
+      }
+
+      .success-message {
+        background: linear-gradient(135deg, #2ecc71, #27ae60);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 25px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        display: none;
+        position: relative;
+        z-index: 2;
+        animation: slideIn 0.5s ease-out;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateY(-20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .error-message {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 25px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        display: none;
+        position: relative;
+        z-index: 2;
+        animation: slideIn 0.5s ease-out;
+      }
+
+      /* Profile Information Styles */
+      .info-section {
+        position: relative;
+        z-index: 2;
+      }
+
+      .info-section h3 {
+        font-size: 24px;
+        color: #2c3e50;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .info-item {
+        display: flex;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .info-item:last-child {
+        border-bottom: none;
+      }
+
+      .info-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        color: white;
+        font-size: 16px;
+      }
+
+      .info-content {
+        flex: 1;
+      }
+
+      .info-label {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 14px;
+        margin-bottom: 4px;
+      }
+
+      .info-value {
+        color: #7f8c8d;
+        font-size: 16px;
+      }
+
+      .info-value.empty {
+        font-style: italic;
+        color: #bdc3c7;
+      }
+
+      .loading {
+        display: none;
+        text-align: center;
+        padding: 20px;
+        color: #7f8c8d;
+      }
+
+      .spinner {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #667eea;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 10px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Mobile Responsive */
+      @media (max-width: 768px) {
+        .profile-container {
+          grid-template-columns: 1fr;
+          gap: 20px;
+          padding: 10px;
+        }
+
+        .profile-card,
+        .profile-info {
+          padding: 30px 20px;
+        }
+
+        .profile-card h2 {
+          font-size: 28px;
+        }
+
+        .profile-avatar {
+          width: 120px;
+          height: 120px;
+        }
+
+        .avatar-circle i {
+          font-size: 48px;
+        }
+
+        .info-section h3 {
+          font-size: 20px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .profile-container {
+          margin: 10px;
+        }
+
+        .profile-card,
+        .profile-info {
+          padding: 20px 15px;
+        }
+
+        .profile-actions {
+          gap: 10px;
+        }
+
+        .profile-actions a,
+        .profile-actions button {
+          padding: 12px 16px;
+          font-size: 13px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="profile-container">
+      <!-- Profile Card -->
+      <div class="profile-card">
+        <div class="success-message" id="successMessage">
+          <i class="fas fa-check-circle"></i> Profile picture updated
+          successfully!
+        </div>
+
+        <div class="error-message" id="errorMessage">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span id="errorText"></span>
+        </div>
+
+        <div class="loading" id="loadingMessage">
+          <div class="spinner"></div>
+          Uploading...
+        </div>
+
+        <div class="profile-avatar">
+          <div class="avatar-circle">
+            {% if user.profile.profile_picture %}
+            <img
+              src="{{ user.profile.profile_picture.url }}"
+              alt="Profile Picture"
+              class="profile-image"
+              id="profileImage"
+            />
+            {% else %}
+            <i class="fas fa-user" id="defaultIcon"></i>
+            {% endif %}
+            <div
+              class="upload-overlay"
+              onclick="document.getElementById('imageInput').click()"
+            >
+              <i class="fas fa-camera"></i>
+            </div>
+          </div>
+        </div>
+
+        <h2>{{ user.get_full_name|default:user.username }}</h2>
+        <p class="profile-subtitle">@{{ user.username }}</p>
+
+        <form
+          id="uploadForm"
+          enctype="multipart/form-data"
+          style="display: none"
+        >
+          {% csrf_token %}
+          <input
+            type="file"
+            id="imageInput"
+            class="upload-input"
+            accept="image/*"
+            onchange="uploadImage()"
+          />
+        </form>
+
+        <div class="profile-actions">
+          <button
+            type="button"
+            class="upload-btn"
+            onclick="document.getElementById('imageInput').click()"
+          >
+            <i class="fas fa-camera"></i>
+            Upload Profile Picture
+          </button>
+          <a href="{% url 'edit_profile' %}" class="edit">
+            <i class="fas fa-user-edit"></i>
+            Edit Profile
+          </a>
+          <a href="{% url 'change_password' %}">
+            <i class="fas fa-key"></i>
+            Change Password
+          </a>
+          <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="logout">
+              <i class="fas fa-sign-out-alt"></i>
+              Logout
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Profile Information -->
+      <div class="profile-info">
+        <div class="info-section">
+          <h3>
+            <i class="fas fa-info-circle"></i>
+            Profile Information
+          </h3>
+
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="info-content">
+              <div class="info-label">Email Address</div>
+              <div class="info-value">
+                {{ user.email|default:"Not provided" }}
+              </div>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="info-content">
+              <div class="info-label">Member Since</div>
+              <div class="info-value">{{ user.date_joined|date:"F j, Y" }}</div>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="info-content">
+              <div class="info-label">Location</div>
+              <div
+                class="info-value {% if not user.profile.location %}empty{% endif %}"
+              >
+                {{ user.profile.location|default:"Not specified" }}
+              </div>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-birthday-cake"></i>
+            </div>
+            <div class="info-content">
+              <div class="info-label">Birth Date</div>
+              <div
+                class="info-value {% if not user.profile.birth_date %}empty{% endif %}"
+              >
+                {{ user.profile.birth_date|date:"F j, Y"|default:"Not specified"
+                }}
+              </div>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="info-content">
+              <div class="info-label">Bio</div>
+              <div
+                class="info-value {% if not user.profile.bio %}empty{% endif %}"
+              >
+                {{ user.profile.bio|default:"No bio available" }}
+              </div>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="info-content">
+              <div class="info-label">Last Login</div>
+              <div class="info-value">
+                {{ user.last_login|date:"F j, Y g:i A"|default:"Never" }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="profile-actions">
-      <a href="{% url 'change_password' %}"><i class="fas fa-key"></i> Change Password</a>
-      <a href="{% url 'edit_profile' %}"><i class="fas fa-user-edit"></i> Edit Profile</a>
-      <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
-    </div>
-  </div>
+    <script>
+      function uploadImage() {
+        const input = document.getElementById("imageInput");
+        const file = input.files[0];
 
-</body>
+        if (file) {
+          // Show loading message
+          document.getElementById("loadingMessage").style.display = "block";
+          document.getElementById("successMessage").style.display = "none";
+          document.getElementById("errorMessage").style.display = "none";
+
+          // Validate file size (5MB max)
+          if (file.size > 5 * 1024 * 1024) {
+            showError("File too large. Maximum size is 5MB.");
+            return;
+          }
+
+          // Validate file type
+          const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/gif",
+            "image/webp",
+          ];
+          if (!allowedTypes.includes(file.type)) {
+            showError(
+              "Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed."
+            );
+            return;
+          }
+
+          const formData = new FormData();
+          formData.append("profile_picture", file);
+          formData.append(
+            "csrfmiddlewaretoken",
+            document.querySelector("[name=csrfmiddlewaretoken]").value
+          );
+
+          fetch('{% url "upload_profile_picture" %}', {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              document.getElementById("loadingMessage").style.display = "none";
+
+              if (data.success) {
+                const profileImage = document.getElementById("profileImage");
+                const defaultIcon = document.getElementById("defaultIcon");
+
+                if (profileImage) {
+                  profileImage.src =
+                    data.image_url + "?t=" + new Date().getTime(); // Cache busting
+                } else {
+                  // Create new image element if it doesn't exist
+                  const avatarCircle = document.querySelector(".avatar-circle");
+                  const newImg = document.createElement("img");
+                  newImg.src = data.image_url + "?t=" + new Date().getTime();
+                  newImg.alt = "Profile Picture";
+                  newImg.className = "profile-image";
+                  newImg.id = "profileImage";
+                  avatarCircle.appendChild(newImg);
+
+                  // Hide default icon
+                  if (defaultIcon) {
+                    defaultIcon.style.display = "none";
+                  }
+                }
+
+                // Show success message
+                showSuccess("Profile picture updated successfully!");
+              } else {
+                showError(data.error || "Error uploading image");
+              }
+            })
+            .catch((error) => {
+              document.getElementById("loadingMessage").style.display = "none";
+              console.error("Error:", error);
+              showError("Network error. Please try again.");
+            });
+        }
+      }
+
+      function showSuccess(message) {
+        const successMessage = document.getElementById("successMessage");
+        successMessage.style.display = "block";
+        setTimeout(() => {
+          successMessage.style.display = "none";
+        }, 5000);
+      }
+
+      function showError(message) {
+        const errorMessage = document.getElementById("errorMessage");
+        const errorText = document.getElementById("errorText");
+        errorText.textContent = message;
+        errorMessage.style.display = "block";
+        setTimeout(() => {
+          errorMessage.style.display = "none";
+        }, 5000);
+      }
+
+      // Add drag and drop functionality
+      const avatarCircle = document.querySelector(".avatar-circle");
+
+      avatarCircle.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        avatarCircle.style.transform = "scale(1.05)";
+      });
+
+      avatarCircle.addEventListener("dragleave", (e) => {
+        e.preventDefault();
+        avatarCircle.style.transform = "scale(1)";
+      });
+
+      avatarCircle.addEventListener("drop", (e) => {
+        e.preventDefault();
+        avatarCircle.style.transform = "scale(1)";
+
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          document.getElementById("imageInput").files = files;
+          uploadImage();
+        }
+      });
+    </script>
+  </body>
 </html>
 {% endblock %}

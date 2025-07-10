@@ -16,12 +16,12 @@ urlpatterns = [
      path('admin/', admin.site.urls),
      path('change_password/', views.change_password, name='change_password'),
      path('edit_profile/', views.edit_profile, name='edit_profile'),
-      path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='accounts/password_change_done.html'), name='password_change_done'),
+     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='accounts/password_change_done.html'), name='password_change_done'),
        #   path('profile/', views.profile_view, name='profile'),
-    path('profile/upload-picture/', views.upload_profile_picture, name='upload_profile_picture'),
-    path('profile/edit/', views.edit_profile, name='edit_profile'),
-    path('profile/change-password/', views.change_password, name='change_password'),
-    path('logout/', views.logout_view, name='logout'),
+     path('profile/upload-picture/', views.upload_profile_picture, name='upload_profile_picture'),
+     path('profile/edit/', views.edit_profile, name='edit_profile'),
+     path('profile/change-password/', views.change_password, name='change_password'),
+     path('logout/', views.logout_view, name='logout'),
 
      # path('accounts/', include('accounts.urls')),
 ]
